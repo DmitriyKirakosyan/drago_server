@@ -11,6 +11,11 @@
 -define (WHITE, 2).
 
 %% board = [[0, 0, 1, 1, 2, ..], ..]
+
+
+%%%
+%%% KILL or GET KILLED!
+%%%
 getDeadStones(Point, Board) ->
     getDeadStones(Board, pointValue(Point, Board), [], [Point]).
 
@@ -29,7 +34,7 @@ getDeadStones(Board, StoneType, DeadStones, [PointToConsider | FreshPoints]) ->
             getDeadStones(Board, StoneType, [PointToConsider | DeadStones], FreshPoints ++ NewPoints);
 
         %% ?OUT_OF_BORDER or other type stone => just go further
-        _ -> getDeadStones(Board, StoneType, DeadStones, FreshPoints) 
+        _ -> getDeadStones(Board, StoneType, DeadStones, FreshPoints)
     end.
 
 aroundPoints(#point{x = X, y = Y} = Point) ->
@@ -41,16 +46,18 @@ aroundPoints(#point{x = X, y = Y} = Point) ->
     ].
 
 
-pointValue(#point{x = X}, Board) when length(Board) < X ->
-    ?OUT_OF_BOARD;
-pointValue(#point{x = X}, _) when X < 1 ->
-    ?OUT_OF_BOARD;
-pointValue(#point{y = Y}, [Col | _]) when length(Col) < Y ->
-    ?OUT_OF_BOARD;
-pointValue(#point{y = Y}, _) when Y < 1 ->
-    ?OUT_OF_BOARD;
+pointValue(#point{x = X}, Board) when length(Board) < X ->      ?OUT_OF_BOARD;
+pointValue(#point{x = X}, _) when X < 1 ->                      ?OUT_OF_BOARD;
+pointValue(#point{y = Y}, [Col | _]) when length(Col) < Y ->    ?OUT_OF_BOARD;
+pointValue(#point{y = Y}, _) when Y < 1 ->                      ?OUT_OF_BOARD;
 pointValue(#point{x = X, y = Y}, Board) ->
     lists:nth(Y, lists:nth(X, Board)).
+
+
+%%%
+%%% Score Estimator
+%%%
+
 
 
 %%%
