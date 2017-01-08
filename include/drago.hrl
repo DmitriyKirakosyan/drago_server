@@ -6,7 +6,10 @@
 
 -define (REQUEST_TIME, 10000).
 
--record (stone, {color, x = -1, y = -1, hidden = false, basic = false, number = 0, pass = false}).
+-record (stone, {color :: atom(), x = -1, y = -1, hidden = false, basic = false, number = 0, pass = false}).
+
+-record(point, {x :: integer(), y :: integer()}).
+-record(basic_stone, {color :: atom(), x :: integer(), y :: integer()}).
 
 -record (game_request, {white_user_id, black_user_id, white_ready=false, black_ready=false, time_left=?REQUEST_TIME, last_update}).
 

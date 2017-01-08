@@ -22,7 +22,7 @@
 
 -define(collection, state).
 
--include("batoo.hrl").
+-include("drago.hrl").
 
 -record(state, {alive=true, user_state=#user_state{}}).
 

@@ -2,13 +2,11 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -export ([getDeadStones/2]).
+-export([pointValue/2]).
+-export([aroundPoints/1]).
 
--record (point, {x = 0, y = 0}).
-
--define (OUT_OF_BOARD, undefined).
--define (EMPTY, 0).
--define (BLACK, 1).
--define (WHITE, 2).
+-include("drago.hrl").
+-include("calculations.hrl").
 
 %% board = [[0, 0, 1, 1, 2, ..], ..]
 
@@ -46,6 +44,12 @@ aroundPoints(#point{x = X, y = Y} = Point) ->
     ].
 
 
+
+%%%
+%%% Working with Matrix Board
+%%%
+
+-spec pointValue(#point{}, list(list())) -> integer().
 pointValue(#point{x = X}, Board) when length(Board) < X ->      ?OUT_OF_BOARD;
 pointValue(#point{x = X}, _) when X < 1 ->                      ?OUT_OF_BOARD;
 pointValue(#point{y = Y}, [Col | _]) when length(Col) < Y ->    ?OUT_OF_BOARD;
@@ -54,15 +58,12 @@ pointValue(#point{x = X, y = Y}, Board) ->
     lists:nth(Y, lists:nth(X, Board)).
 
 
-%%%
-%%% Score Estimator
-%%%
-
 
 
 %%%
 %%% UNIT TESTS
 %%%
+
 
 dead_stones_test() ->
     Board = [
