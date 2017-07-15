@@ -4,8 +4,9 @@
 -export ([getDeadStones/2]).
 -export([pointValue/2]).
 -export([aroundPoints/1]).
+-export([checkIfSubgroup/2]).
+-export([isFirstLine/2]).
 
--include("drago.hrl").
 -include("calculations.hrl").
 
 %% board = [[0, 0, 1, 1, 2, ..], ..]
@@ -45,11 +46,24 @@ aroundPoints(#point{x = X, y = Y} = Point) ->
 
 
 
+-spec checkIfSubgroup(points(), points()) -> boolean().
+checkIfSubgroup([], _) -> true;
+checkIfSubgroup([Point | Points], Group) ->
+    case lists:member(Point, Group) of
+        true -> checkIfSubgroup(Points, Group);
+        false -> false
+    end.
+
+% inBoardAroundPoints(Point, Board) ->
+%     [P || P <- aroundPoints(Point), pointValue(P, Board) =/= ?OUT_OF_BOARD].
+
+
+
 %%%
 %%% Working with Matrix Board
 %%%
 
--spec pointValue(#point{}, list(list())) -> integer().
+-spec pointValue(#point{}, board()) -> integer().
 pointValue(#point{x = X}, Board) when length(Board) < X ->      ?OUT_OF_BOARD;
 pointValue(#point{x = X}, _) when X < 1 ->                      ?OUT_OF_BOARD;
 pointValue(#point{y = Y}, [Col | _]) when length(Col) < Y ->    ?OUT_OF_BOARD;
@@ -57,7 +71,11 @@ pointValue(#point{y = Y}, _) when Y < 1 ->                      ?OUT_OF_BOARD;
 pointValue(#point{x = X, y = Y}, Board) ->
     lists:nth(Y, lists:nth(X, Board)).
 
-
+-spec isFirstLine(#point{}, board()) -> boolean().
+isFirstLine(#point{x = X, y = Y}, Board) ->
+    X == 1 orelse Y == 1 orelse
+    pointValue(#point{x = X + 1}) == ?OUT_OF_BOARD orelse
+    pointValue(#point{y = Y + 1}) == ?OUT_OF_BOARD.
 
 
 %%%
